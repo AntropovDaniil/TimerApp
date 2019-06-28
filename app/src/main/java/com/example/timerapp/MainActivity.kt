@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.getSystemService
+import com.example.timerapp.util.NotificationUtil
 import com.example.timerapp.util.PrefUtil
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -81,10 +82,12 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         initTimer()
-        //TODO: hide notifications
 
         //removeAlarm
         removeAlarm(this)
+
+        //hide notification
+        NotificationUtil.hideTimerNotification(this)
     }
 
     override fun onPause() {
@@ -94,10 +97,12 @@ class MainActivity : AppCompatActivity() {
             timer.cancel()
             //start background timer
             val wakeUpTime = setAlarm(this, nowSeconds, secondsRemaining)
-            //TODO: show notifications
+            //show notification
+            NotificationUtil.showTimerRunning(this, wakeUpTime)
         }
         else if (timerState == TimerState.Paused){
-            //TODO: show notifications
+            // show notification
+            NotificationUtil.showTimerPaused(this)
         }
 
         PrefUtil.setPreviousTimerLengthSeconds(timerLengthSeconds, this)
